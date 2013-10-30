@@ -5,7 +5,8 @@ block content
   ul
     each song in results
       a(href=song.link)
-        li= song.artist_name + " : " + song.title + " " + song.audio_summary.danceability
+        li= song.artist_name + " : " + song.title
+        li= "D " + Math.round(100*song.audio_summary.danceability) + " / AF " + Math.round(100*song.artist_familiarity) + " / H " + Math.round(100*song.song_hotttnesss)
   div 
     a(href='/req') Search again
   div (powered by EchoNest)

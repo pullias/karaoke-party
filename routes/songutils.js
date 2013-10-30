@@ -70,7 +70,7 @@ function handleSearchPost(req, res) {
     "use strict";
     var baseUrl = 'http://developer.echonest.com/api/v4/song/search',
         apiKey = require('../config').echoNestKey,
-        specialSauce = '&sort=song_hotttnesss-desc&song_type=studio&bucket=audio_summary&bucket=song_hotttnesss',
+        specialSauce = '&sort=song_hotttnesss-desc&song_type=studio&bucket=audio_summary&bucket=song_hotttnesss&bucket=artist_familiarity&results=100&min_duration=100.0',
         searchText = req.param('userinput') || 'coolio',
         fullUrl = baseUrl + '?' + 'api_key=' + apiKey + '&combined=' + searchText + specialSauce,
         resultArray = [];
@@ -89,6 +89,7 @@ function handleSearchPost(req, res) {
         });
         apiRes.on('end', function () {
             var jsonObj = JSON.parse(body);
+            console.log(JSON.stringify(jsonObj));
             resultArray = filterResults(jsonObj.response.songs);
             for (i = 0; i < resultArray.length; i++) {
                 song = resultArray[i];
