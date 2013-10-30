@@ -4,7 +4,7 @@ var secrets = require('./config-secrets');
 var config = {};
 
 config.hostport = process.env.WEB_PORT || 3000;
-config.hostname = 'localhost';
+config.hostname = '10.0.1.9';
 if (config.hostport !== 80) {
     config.hostname += (":" + config.hostport);
 }
