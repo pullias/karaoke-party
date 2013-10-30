@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  div Request a song
+  form(action='/req' method='post')
+    div
+      input(type='text' name='userinput')
+    div
+      button(type='submit') Search

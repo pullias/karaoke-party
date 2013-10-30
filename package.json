@@ -1,0 +1,16 @@
+{
+  "name": "karaoke-party",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "3.4.2",
+    "jade": "*",
+    "stylus": "*",
+    "passport": "~0.1.17",
+    "passport-google": "~0.3.0",
+    "redis": "~0.9.0"
+  }
+}

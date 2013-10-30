@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  div Select a song
+  ul
+    each song in results
+      a(href=song.link)
+        li= song.artist_name + " : " + song.title + " " + song.audio_summary.danceability
+  div 
+    a(href='/req') Search again
+  div (powered by EchoNest)

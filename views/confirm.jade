@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  div= user
+  div will perform
+  div= artist
+  div= title
+  form(action='/confirm' method='post')
+      button(type='submit') Confirm
