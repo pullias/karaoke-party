@@ -1,12 +1,36 @@
+// search results page
 extends layout
 
 block content
-  div Select a song
-  ul
-    each song in results
-      a(href=song.link)
-        li= song.artist_name + " : " + song.title
-        li= "D " + Math.round(100*song.audio_summary.danceability) + " / AF " + Math.round(100*song.artist_familiarity) + " / H " + Math.round(100*song.song_hotttnesss)
-  div 
-    a(href='/req') Search again
-  div (powered by EchoNest)
+  div(class='outer')
+    div(class='modal fade' id='confirmModal')
+      div(class="modal-dialog")
+        div(class='modal-content')
+          div(class='modal-body')
+            div(id='user')= performer
+            div will perform
+            div(id='artist')
+            div(id='title')
+            form(action='/confirm' method='post')
+              input(type='hidden' name='song')
+              input(type='hidden' name='artist')
+              input(type='hidden' name='songId')
+              button(class='btn btn-primary btn-lg' type='submit') Confirm
+    // end modal, begin main page
+    div(class='main')
+      form(action='/req' method='post' class='form-search')
+        button(type='submit' class='btn btn-success' id='req') Search again
+        input(type='search' name='userinput')
+
+      div Select a song
+      ul(class='list-group')
+        each song in results
+          li(class='list-group-item' onclick='showModal(this)' data-songId=song.id)
+            span(class='artist')= song.artist_name
+            span  - 
+            span(class='title')= song.title
+            span(class='badge')= song.k
+      div 
+        a(href='#req') Search again
+      div (powered by EchoNest)
+  script(type='text/javascript' src='/js/front-utils.js')

@@ -36,17 +36,14 @@ exports.attachHandlers = function attachHandlers(router) {
     router.use(passport.initialize());
     router.use(passport.session());
     router.get('/auth/google',
-        passport.authenticate('google', {failureRedirect: '/'}),
-        function (req, res) { // not called
-        });
+        passport.authenticate('google'));
     router.get('/auth/google/return',
         passport.authenticate('google', {failureRedirect: '/'}),
         function (req, res) {
-            res.redirect(req.session.next);
+            res.redirect('/');
         });
     router.get('/logout', function (req, res) {
         req.logout();
-        delete req.session.count;
         res.redirect('/');
     });
 };
