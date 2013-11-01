@@ -1,0 +1,7 @@
+//- This renders the playlist
+ul(class='list-group')
+  each song in results
+    li(class='list-group-item')= song.artist_name + " : " + song.title
+      if (song.performerid == user)
+        a(href="/delete/" + song.id)
+          div delete
