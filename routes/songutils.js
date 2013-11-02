@@ -77,12 +77,11 @@ function handleSearchPost(req, res) {
         // TODO - sanitize user input
         searchText = req.param('userinput') || 'coolio',
         fullUrl = baseUrl + '?' + 'api_key=' + apiKey + '&combined=' + searchText + specialSauce;
-
+    console.log("log:searchQuery:" + searchText);
     // call echonest API to search
     http.get(fullUrl, function (apiRes) {
         // the object apiRes is type IncomingMessage
-        console.log('got response from echonest ' + apiRes.statusCode);
-        console.log('the remaining rate limit is ' + apiRes.headers['x-ratelimit-remaining']);
+        console.log('got response from echonest ' + apiRes.statusCode + '\nthe remaining rate limit is ' + apiRes.headers['x-ratelimit-remaining']);
         var body = '';
         apiRes.setEncoding('utf8');
         apiRes.on('data', function (chunk) {

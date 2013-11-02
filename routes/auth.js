@@ -9,9 +9,9 @@ passport.serializeUser(function (user, done) {
     // no need to store to DB, user profile will be available as req.user
     "use strict";
     var newUser = {};
-    newUser.id = user.identifier || 'no identifier';
     newUser.email = user.emails[0].value || 'no email';
     newUser.name = user.displayName || 'no name';
+    console.log("log:userLogin:" + newUser.email + ":" + newUser.name);
     done(null, newUser);
 });
 passport.deserializeUser(function (obj, done) {
