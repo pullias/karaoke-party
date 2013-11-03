@@ -4,8 +4,8 @@ extends layout
 block content
   div(class='outer')
     div(class='modal fade' id='confirmModal')
-      div(class="modal-dialog")
-        div(class='modal-content')
+      div(class="modal-dialog" id='divModalDialogConfirm')
+        div(class='modal-content' id='divModalContentConfirm')
           div(class='modal-body')
             div(id='user')= performer
             div will perform
@@ -15,7 +15,7 @@ block content
               input(type='hidden' name='song')
               input(type='hidden' name='artist')
               input(type='hidden' name='songId')
-              button(class='btn btn-primary btn-lg' type='submit') Confirm
+              button(class='btn btn-default' type='submit') Confirm
     // end modal, begin main page
     div(class='main')
       h4 Which song would you like to sing?
@@ -27,8 +27,9 @@ block content
             span(class='title')= song.title
             span(class='badge')= song.k
       form(action='/req' method='post' class='form-inline')
-        button(type='submit' class='btn btn-success' id='req') Search again
-        input(type='search' name='userinput' class='form-control search')
+        button(type='submit' class='btn btn-success' id='searchButton') Search again
+        span(id='searchSpan')
+          input(type='search' class='form-control input-sm' name='searchInput' id='searchInput')
       a(href='http://the.echonest.com/')
-        img(src='img/EN_P_on_Light_Transparent.png' class='echoNest')
+        img(src='img/EN_P_on_Light_Transparent.png' id='echoNestImg')
   script(type='text/javascript' src='/js/front-utils.js')

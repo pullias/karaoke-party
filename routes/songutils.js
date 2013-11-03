@@ -18,6 +18,9 @@ exports.attachHandlers = function attachHandlers(app) {
     });
     // handle the song search query, restricted to logged in users
     app.post('/req', ensureAuthenticated, handleSearchPost);
+    app.get('/req', function(req, res) {
+        req.redirect('/');
+    });
     // handle the request to add a new song to the playlist, restricted to logged in users
     app.post('/confirm', ensureAuthenticated, function (req, res) {
         var newSong = {};
@@ -75,7 +78,7 @@ function handleSearchPost(req, res) {
         apiKey = require('../config').echoNestKey,
         specialSauce = '&sort=song_hotttnesss-desc&song_type=studio&bucket=audio_summary&bucket=song_hotttnesss&bucket=artist_familiarity&results=100&min_duration=100.0&artist_min_familiarity=0.4&song_min_hotttnesss=0.4',
         // TODO - sanitize user input
-        searchText = req.param('userinput') || 'coolio',
+        searchText = req.param('searchInput') || 'coolio',
         fullUrl = baseUrl + '?' + 'api_key=' + apiKey + '&combined=' + searchText + specialSauce;
     console.log("log:searchQuery:" + searchText);
     // call echonest API to search

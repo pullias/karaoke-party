@@ -1,5 +1,6 @@
 // click handler for a results object in the list of song search results
 var showModal = function (obj) {
+    "use strict";
     var song = {artist: $(obj).find('.artist').eq(0).text(), title: $(obj).find('.title').eq(0).text()};
     $('#artist').text(song.artist);
     $('#title').text(song.title);
@@ -7,4 +8,10 @@ var showModal = function (obj) {
     $('input[name="artist"]').attr('value', song.artist);
     $('input[name="songId"]').attr('value', $(obj).attr('data-songid'));
     $('#confirmModal').modal();
-}
+};
+// click handler for delete a song button, shows confirm-deletion modal
+var showDeleteModal = function (songId) {
+    "use strict";
+    $('a').attr('href', '/delete/' + songId);
+    $('#deleteModal').modal();
+};

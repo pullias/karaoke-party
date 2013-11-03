@@ -18,8 +18,16 @@ block content
       div(class='col-xs-12')
         if auth === false
           a(href='/auth/google')
-            img(src='/img/White-signin-Long-base-44dp.png' id='googleLogin')
+            img(src='/img/White-signin-Long-base-44dp.png' id='googleLoginImg')
         else
           form(action='/req' method='post' class='form-inline')
-            button(type='submit' class='btn btn-success') Request a Song             
-            input(type='search' class='form-control search' name='userinput')      
+            button(type='submit' class='btn btn-success' id='searchButton') Request a Song
+            span(id='searchSpan')
+              input(type='search' class='form-control input-sm' name='searchInput' id='searchInput')   
+    div(class='modal fade' id='deleteModal')
+      div(class="modal-dialog" id="divModalDialogDelete")
+        div(class='modal-content')
+          div(class='modal-body')
+            a
+              button(class='btn btn-danger' type='submit') Delete the song?
+  script(type='text/javascript' src='/js/front-utils.js')               

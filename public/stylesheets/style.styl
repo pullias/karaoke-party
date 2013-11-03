@@ -5,16 +5,34 @@ body
   text-align: center
 .middle
   padding-top: 10px
-#googleLogin
+.glyphicon-remove
+  color: red
+  font-size: larger
+  float:right
+#echoNestImg
+  padding-top: 15px
+#googleLoginImg
   display: block
   margin-left: auto
-  margin-right: auto  
-.btn
-  width: 15%
-  min-width: 126px
+  margin-right: auto
+#searchInput
+  width: 100%
+  -webkit-appearance: none
+  border-radius: 0px
+#searchButton
   margin-right: 5px
-  margin-bottom: 5px
-.search
-  width: 80%
-.echoNest
-  padding-top: 15px
+  float: left
+  height: 42px
+#searchSpan
+  display: block
+  overflow: hidden
+#divModalDialogDelete
+  width: 200px
+  text-align: center
+#divModalDialogConfirm
+  width: 70%
+#divModalContentConfirm  
+  background-color: #EBFAFF
+// fix issue where body shrinks on the right while modal is open on small screen
+body.modal-open
+  margin-right: 0
