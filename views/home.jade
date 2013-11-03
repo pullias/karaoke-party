@@ -1,24 +1,25 @@
 extends layout
 
 block content
-  div(class='outer')
-    div(class='row-fluid main')
-      div(class='span12 yellow')
-        div(style='text-align: center')
-          div(class='h3') Pullias.com
-          div presents
-          div(class='h4') Launch Party!
-          div(class='h3') Karaoke Jam!
-          div at
-          div(class='h4') Santa's Pub!
-          div 11/11/2013 8pm
-        div(class='playlist span10')
-          include playlist
-        div(class='footer')
-          if auth === false
-            a(href='/auth/google')
-              img(src='/img/White-signin-Long-base-44dp.png')
-          else
-            form(action='/req' method='post' class='form-inline')
-                button(type='submit' class='btn btn-success') Request a Song                    
-                input(type='search' class='form-control' name='userinput' style='width:70%;margin-left:5px')      
+  div(class='.container')
+    div(class='row header')
+      div(class='col-xs-12')
+        div(class='h3') Pullias.com
+        div presents
+        div(class='h4') Launch Party!
+        div(class='h3') Karaoke Jam!
+        div at
+        div(class='h4') Santa's Pub!
+        div 11/11/2013 8pm
+    div(class='row middle')
+      div(class='col-xs-12')
+        include playlist
+    div(class='row footer')
+      div(class='col-xs-12')
+        if auth === false
+          a(href='/auth/google')
+            img(src='/img/White-signin-Long-base-44dp.png' id='googleLogin')
+        else
+          form(action='/req' method='post' class='form-inline')
+            button(type='submit' class='btn btn-success') Request a Song             
+            input(type='search' class='form-control search' name='userinput')      
