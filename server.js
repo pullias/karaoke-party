@@ -3,6 +3,7 @@ var routes = require('./routes');
 var path = require('path');
 var http = require('http');
 var config = require('./config');
+var RedisStore = require('connect-redis')(express);
 
 var app = express();
 config.devOrProd(app);
@@ -16,7 +17,7 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(config.cookieParserSecret));
-app.use(express.session());
+app.use(express.session({store: new RedisStore(), secret: config.redisStoreSecret}));
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
