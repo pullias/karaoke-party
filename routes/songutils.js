@@ -19,7 +19,7 @@ exports.attachHandlers = function attachHandlers(app) {
     // handle the song search query, restricted to logged in users
     app.post('/req', ensureAuthenticated, handleSearchPost);
     app.get('/req', function(req, res) {
-        req.redirect('/');
+        res.redirect('/');
     });
     // handle the request to add a new song to the playlist, restricted to logged in users
     app.post('/confirm', ensureAuthenticated, function (req, res) {
