@@ -1,8 +1,9 @@
 //- This renders the playlist
-ul(class='list-group')
-  each song in results
-    li(class='list-group-item')
-      div(id='title')= song.title
-        if (song.performerid == user)
-          span(class='glyphicon glyphicon-remove' onclick='showDeleteModal("' + song.id + '")')    
-      div(id='artist')= song.artist_name
+div(id='scrollDiv' class='scroll-text')
+  ul(class='list-group')
+    each song in results
+      li(class='list-group-item')
+        div(id='title')= song.title
+          if (song.performerid == user)
+            span(class='glyphicon glyphicon-remove' onclick='showDeleteModal("' + song.id + '")')    
+        div(id='artist')= song.artist_name

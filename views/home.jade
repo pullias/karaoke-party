@@ -11,10 +11,10 @@ block content
         div at
         div(class='h4') Santa's Pub!
         div 11/11/2013 8pm
-    div(class='row middle')
+    div(class='row middle maxWidth700')
       div(class='col-xs-12')
         include playlist
-    div(class='row footer')
+    div(class='row footer maxWidth700')
       div(class='col-xs-12')
         if auth === false
           a(href='/auth/google')
@@ -30,4 +30,5 @@ block content
           div(class='modal-body')
             a
               button(class='btn btn-danger' type='submit') Delete the song?
-  script(type='text/javascript' src='/js/front-utils.js')               
+  script(type='text/javascript' src='/js/front-utils.js')
+  script $('#scrollDiv').scrollbox({ linear: true, step: 1, delay: 0, speed: 100, onMouseOverPause: false});
