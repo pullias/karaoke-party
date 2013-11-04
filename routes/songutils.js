@@ -79,7 +79,7 @@ function handleSearchPost(req, res) {
         specialSauce = '&sort=song_hotttnesss-desc&song_type=studio&bucket=audio_summary&bucket=song_hotttnesss&bucket=artist_familiarity&results=100&min_duration=100.0&artist_min_familiarity=0.4&song_min_hotttnesss=0.4',
         // TODO - sanitize user input
         searchText = req.param('searchInput') || 'coolio',
-        fullUrl = baseUrl + '?' + 'api_key=' + apiKey + '&combined=' + searchText + specialSauce;
+        fullUrl = baseUrl + '?' + 'api_key=' + apiKey + '&combined=' + encodeURIComponent(searchText) + specialSauce;
     console.log("log:searchQuery:" + searchText);
     // call echonest API to search
     http.get(fullUrl, function (apiRes) {
