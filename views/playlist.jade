@@ -3,7 +3,7 @@ div(id='scrollDiv' class='scroll-text')
   ul(class='list-group')
     each song in results
       li(class='list-group-item')
-        div(class='title')= song.title
+        div(class='title bold')= song.title
           span(class='spotifySong')
             a(href=song.spotify)
               img(src='/img/spotify-logo-primary-vertical-light-background-rgb.png' height='30px')
