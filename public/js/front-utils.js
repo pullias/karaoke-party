@@ -15,3 +15,13 @@ var showDeleteModal = function (songId) {
     $('a').attr('href', '/delete/' + songId);
     $('#deleteModal').modal();
 };
+var blinkXmas = function () {
+    "use strict";
+    var counter = 0,
+        colors = ['red', 'green'];
+    window.setInterval(function () {
+        $('.header').css('color',colors[counter % colors.length]);
+        counter += 1;
+        $('div.h3').css('color',colors[counter % colors.length]);       
+    }, 1000);
+};
