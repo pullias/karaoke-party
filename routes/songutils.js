@@ -18,7 +18,7 @@ exports.attachHandlers = function attachHandlers(app) {
     });
     // handle the song search query, restricted to logged in users
     app.post('/req', ensureAuthenticated, handleSearchPost);
-    app.get('/req', function(req, res) {
+    app.get('/req', function (req, res) {
         res.redirect('/');
     });
     // handle the request to add a new song to the playlist, restricted to logged in users
@@ -42,7 +42,7 @@ exports.attachHandlers = function attachHandlers(app) {
         getSongList(function (songList) {
             var user = req.user.email,
                 i;
-            for (i = 0; i < songList.length; i++) {
+            for (i = 0; i < songList.length; i += 1) {
                 if ((songList[i].id === req.params.id) && (songList[i].performerid === user)) {
                     // delete song from redis, then redirect to /
                     client.lrem('Songs', 0, JSON.stringify(songList[i]), function () {
@@ -64,7 +64,7 @@ function getSongList(next) {
         var songList = [],
             i;
         // convert jsonStringArray to list of song objects                
-        for (i = 0; i < jsonStringArray.length; i++) {
+        for (i = 0; i < jsonStringArray.length; i += 1) {
             songList.push(JSON.parse(jsonStringArray[i]));
         }
         next(songList);
@@ -80,7 +80,7 @@ function handleSearchPost(req, res) {
         // TODO - sanitize user input
         searchText = req.param('searchInput') || 'coolio',
         fullUrl = baseUrl + '?' + 'api_key=' + apiKey + '&combined=' + encodeURIComponent(searchText) + specialSauce;
-    console.log("log:searchQuery:" + searchText);
+    console.log("log:searchQuery:(" + searchText + ")");
     // call echonest API to search
     http.get(fullUrl, function (apiRes) {
         // the object apiRes is type IncomingMessage
@@ -93,7 +93,7 @@ function handleSearchPost(req, res) {
         // parse the JSON response and render the search results view
         apiRes.on('end', function () {
             var jsonObj = JSON.parse(body),
-                resultArray = filterResults(jsonObj.response.songs);
+                resultArray = filterResults(jsonObj.response.songs, searchText);
             res.render('results.jade', { results: resultArray, performer: req.user.name});
         });
     });
@@ -107,30 +107,32 @@ function ensureAuthenticated(req, res, next) {
 }
 
 // filter the results list from echonest
-function filterResults(results) {
+function filterResults(results, query) {
     "use strict";
     var filteredSongs = [],
         i,
         hash,
         song,
-        prevD,
-        resultList = [];
+        resultList = [],
+        queryTerms,
+        songLower,
+        artistLower;
 
+    // for a given artist, songs with the same hotttnesss can be considered duplicates
     function getDupHash(song) {
         return song.artist_id + song.song_hotttnesss;
     }
 
     // duplicate songs will have the same song_hotttnesss
-    // select the duplicate with the highest danceability
-    // TODO - keep the shorter title
-    for (i = 0; i < results.length; i++) {
+    // select the duplicate with the shortest title, then highest danceability
+    for (i = 0; i < results.length; i += 1) {
         hash = getDupHash(results[i]);
         song = filteredSongs[hash];
-        prevD = 0;
-        if (song !== undefined) {
-            prevD = song.audio_summary.danceability;
-        }
-        if (results[i].audio_summary.danceability > prevD) {
+        if (song === undefined) {
+            filteredSongs[hash] = results[i];
+        } else if (results[i].title.length < song.title.length) {
+            filteredSongs[hash] = results[i];
+        } else if ((results[i].title.length === song.title.length) && (results[i].audio_summary.danceability > song.audio_summary.danceability)) {
             filteredSongs[hash] = results[i];
         }
     }
@@ -139,12 +141,28 @@ function filterResults(results) {
         if (filteredSongs.hasOwnProperty(song)) {
             // calculate K-score
             filteredSongs[song].k = Math.round(100 * (filteredSongs[song].audio_summary.danceability + 3 * filteredSongs[song].song_hotttnesss + 2 * filteredSongs[song].artist_familiarity) / 5);
+            // count search terms matched
+            queryTerms = query.toLowerCase().split(' ');
+            songLower = filteredSongs[song].title.toLowerCase();
+            artistLower = filteredSongs[song].artist_name.toLowerCase();
+            for (i = 0; i < queryTerms.length; i += 1) {
+                if (queryTerms[i].length > 1) {
+                    if ((songLower.indexOf(queryTerms[i]) > -1) || (artistLower.indexOf(queryTerms[i]) > -1)) {
+                        filteredSongs[song].match = 1 + (filteredSongs[song].match || 0);
+                    }
+                }
+            }
             resultList.push(filteredSongs[song]);
         }
     }
-    // sort by K score
+    // sort by matches, then K score
+    // highest match, then highest K
     resultList.sort(function (a, b) {
+        if (b.match !== a.match) {
+            return (b.match - a.match);
+        }
         return (b.k - a.k);
     });
-    return resultList;
+    // return top 20 results   
+    return resultList.slice(0, 20);
 }
