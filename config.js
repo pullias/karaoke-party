@@ -10,6 +10,7 @@ try {
 
 config.hostport = process.env.WEB_PORT || 3000;
 config.hostname = '10.0.1.9';
+config.logger = 'dev';
 if (config.hostport !== 80) {
     config.hostname += (":" + config.hostport);
 }
@@ -23,6 +24,7 @@ config.devOrProd = function (app) {
     app.configure('production', function () {
         config.hostport = 80;
         config.hostname = 'party.pullias.com';
+        config.logger = ':remote-addr - - [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time';
     });
 };
 

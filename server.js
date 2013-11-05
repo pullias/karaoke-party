@@ -6,6 +6,7 @@ var config = require('./config');
 var RedisStore = require('connect-redis')(express);
 
 var app = express();
+// set config to production, depending on NODE_ENV
 config.devOrProd(app);
 
 // all environments
@@ -13,7 +14,7 @@ app.set('port', config.hostport);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon(path.join(__dirname, 'public/img/favicon.ico')));
-app.use(express.logger('dev'));
+app.use(express.logger(config.logger));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser(config.cookieParserSecret));
@@ -29,10 +30,7 @@ if ('development' === app.get('env')) {
 // attach the custom handlers
 routes.attachHandlers(app);
 
-
 http.createServer(app).listen(app.get('port'), function () {
     "use strict";
     console.log('Express server listening on port ' + app.get('port'));
 });
-
-
