@@ -22,9 +22,9 @@ block content
       ul(class='list-group')
         each song in results
           li(class='list-group-item' onclick='showModal(this)' data-songId=song.id)
-            span(class='artist')= song.artist_name
-            span  - 
             span(class='title')= song.title
+            span  by           
+            span(class='artist')= song.artist_name
             span(class='badge')= song.k
       form(action='/req' method='post' class='form-inline')
         button(type='submit' class='btn btn-default' id='searchButton') Search again

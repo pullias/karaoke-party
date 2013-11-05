@@ -14,6 +14,8 @@ block content
     div(class='row middle maxWidth700')
       div(class='col-xs-12')
         include playlist
+        div(id='divSpotify' class='hidden-xs')
+          iframe(src=spotifySrc frameborder=0 allowtransparency=true)
     div(class='row footer maxWidth700')
       div(class='col-xs-12')
         if auth === false
@@ -31,4 +33,4 @@ block content
             a
               button(class='btn btn-danger' type='submit') Delete the song?
   script(type='text/javascript' src='/js/front-utils.js')
-  script $('#scrollDiv').scrollbox({ linear: true, step: 1, delay: 0, speed: 100, onMouseOverPause: false});
+  //script $('#scrollDiv').scrollbox({ linear: true, step: 1, delay: 0, speed: 100, onMouseOverPause: false});

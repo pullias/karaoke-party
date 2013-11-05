@@ -3,7 +3,10 @@ div(id='scrollDiv' class='scroll-text')
   ul(class='list-group')
     each song in results
       li(class='list-group-item')
-        div(id='title')= song.title
+        div(class='title')= song.title
+          span(class='spotifySong')
+            a(href=song.spotify)
+              img(src='/img/spotify-logo-primary-vertical-light-background-rgb.png' height='30px')
+        div(class='artist')= song.artist_name
           if (song.performerid == user)
-            span(class='glyphicon glyphicon-remove' onclick='showDeleteModal("' + song.id + '")')    
-        div(id='artist')= song.artist_name
+            span(class='glyphicon glyphicon-remove' onclick='showDeleteModal("' + song.id + '")')   

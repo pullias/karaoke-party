@@ -9,11 +9,20 @@ exports.attachHandlers = function attachHandlers(app) {
     app.get('/', function (req, res) {
         getSongList(function (songList) {
             var auth = req.isAuthenticated(),
-                user = '';
+                user = '',
+                spotifySrc = "https://embed.spotify.com/?uri=spotify:trackset:Launch%20Party%20Jamz:",
+                i;
             if (auth) {
                 user = req.user.email;
             }
-            res.render('home.jade', {results: songList, auth: auth, user: user});
+            // build spotify playlist          
+            for (i = 0; i < songList.length; i += 1) {
+                if (i > 0) {
+                    spotifySrc += ',';
+                }
+                spotifySrc += songList[i].spotify.slice(1 + songList[i].spotify.lastIndexOf(':'));
+            }
+            res.render('home.jade', {results: songList, auth: auth, user: user, spotifySrc: spotifySrc});
         });
     });
     // handle the song search query, restricted to logged in users
@@ -21,18 +30,43 @@ exports.attachHandlers = function attachHandlers(app) {
     app.get('/req', function (req, res) {
         res.redirect('/');
     });
-    // handle the request to add a new song to the playlist, restricted to logged in users
+    // handle the request to add a new song to the playlist, now with spotify
     app.post('/confirm', ensureAuthenticated, function (req, res) {
-        var newSong = {};
+        var newSong = {},
+            baseUrl = "http://ws.spotify.com/search/1/track.json",
+            queryUrl;
         newSong.id = req.body.songId || 'missing songId';
         newSong.artist_name = req.body.artist || "missing artist";
         newSong.title = req.body.song || 'missing song';
         newSong.performerid = req.user.email;
         newSong.performer = req.user.name;
-        console.log("store to db:" + JSON.stringify(newSong));
-        // redis: add to 'Songs' list
-        client.lpush("Songs", JSON.stringify(newSong), function () {
-            res.redirect('/');
+        // get spotify track ID
+        queryUrl = baseUrl + "?q=" + encodeURIComponent(newSong.artist_name + " " + newSong.title);
+        http.get(queryUrl, function (apiRes) {
+            // the object apiRes is type IncomingMessage
+            console.log('got response from spotify ' + apiRes.statusCode);
+            var body = '';
+            apiRes.setEncoding('utf8');
+            apiRes.on('data', function (chunk) {
+                body += chunk;
+            });
+            // parse the JSON response and render the search results view
+            apiRes.on('end', function () {
+                var jsonObj = JSON.parse(body),
+                    i = 0;
+                while ((newSong.spotify === undefined) && (i < jsonObj.tracks.length)) {
+                    if (jsonObj.tracks[i].album.availability.territories.indexOf('US') > -1) {
+                        console.log("found track ID");
+                        newSong.spotify = jsonObj.tracks[i].href;
+                    }
+                    i += 1;
+                }
+                console.log("store to db:" + JSON.stringify(newSong));
+                // redis: add to 'Songs' list
+                client.lpush("Songs", JSON.stringify(newSong), function () {
+                    res.redirect('/');
+                });
+            });
         });
     });
     // handle the request to delete a song from the playlist, restricted to logged in users
