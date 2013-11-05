@@ -2,10 +2,10 @@
 extends layout
 
 block content
-  div(class='outer')
+  div(class='container')
     div(class='modal fade' id='confirmModal')
-      div(class="modal-dialog" id='divModalDialogConfirm')
-        div(class='modal-content' id='divModalContentConfirm')
+      div(class='modal-dialog')
+        div(class='modal-content modal-content-confirm')
           div(class='modal-body')
             div(id='user' class='bold')= performer
             div will perform
@@ -17,19 +17,20 @@ block content
               input(type='hidden' name='songId')
               button(class='btn btn-default' type='submit') Confirm
     // end modal, begin main page
-    div(class='main maxWidth700')
-      h4 Which song would you like to sing?
-      ul(class='list-group')
-        each song in results
-          li(class='list-group-item' onclick='showModal(this)' data-songId=song.id)
-            span(class='title bold')= song.title
-            span  by           
-            span(class='artist')= song.artist_name
-            span(class='badge')= song.k
-      form(action='/req' method='post' class='form-inline')
-        button(type='submit' class='btn btn-default' id='searchButton') Search again
-        span(id='searchSpan')
-          input(type='search' class='form-control input-sm' name='searchInput' id='searchInput')
-      a(href='http://the.echonest.com/')
-        img(src='img/EN_P_on_Light_Transparent.png' id='echoNestImg')
+    div(class='row')
+      div(class='col-xs-12')
+        div(class='h4 padded-div') Which song would you like to sing?
+        ul(class='list-group')
+          each song in results
+            li(class='list-group-item' onclick='showModal(this)' data-songId=song.id)
+              span(class='title bold')= song.title
+              span  by           
+              span(class='artist')= song.artist_name
+              span(class='badge')= song.k
+        include searchbar
+        a(href='http://the.echonest.com/')
+          img(src='img/EN_P_on_Light_Transparent.png' id='echoNestImg')
+  // scripts
   script(type='text/javascript' src='/js/front-utils.js')
+  // change text of search button for this page
+  script $('#searchButton').text('Search again');

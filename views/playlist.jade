@@ -1,13 +1,12 @@
 //- This renders the playlist
-div(id='scrollDiv' class='scroll-text')
+div(id='scrollDiv')
   ul(class='list-group')
     each song in results
       li(class='list-group-item')
-        div(class='title bold')= song.title
-          span(class='spotifySong')
-            a(href=song.spotify)
-              img(src='/img/spotify-logo-primary-vertical-light-background-rgb.png' height='30px')
-        div(class='artist')= song.artist_name
+        div(class='bold')= song.title
+          a(class='spotifySong' href=song.spotify)
+            img(src='/img/spotify-logo-primary-vertical-light-background-rgb.png' height='30px')
+        div= song.artist_name
         if (auth === true)
           div(class='italic')= song.performer.slice(0,2 + song.performer.lastIndexOf(' '))
             if (song.performerid == user)

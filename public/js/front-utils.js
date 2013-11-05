@@ -18,10 +18,13 @@ var showDeleteModal = function (songId) {
 var blinkXmas = function () {
     "use strict";
     var counter = 0,
-        colors = ['red', 'green'];
-    window.setInterval(function () {
-        $('.header').css('color',colors[counter % colors.length]);
-        counter += 1;
-        $('div.h3').css('color',colors[counter % colors.length]);       
-    }, 1000);
+        colors = ['red', 'green'],
+        blinkFn = function () {
+            $('#headerDiv').css('color', colors[counter % colors.length]);
+            counter += 1;
+            $('#headerDiv').find('.h3').css('color', colors[counter % colors.length]);
+        };
+    blinkFn();
+    // blink every 1000 ms
+    window.setInterval(blinkFn, 1000);
 };

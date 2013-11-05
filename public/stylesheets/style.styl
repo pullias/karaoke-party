@@ -1,61 +1,66 @@
+// common to all pages
 body
   padding: 5px
   background-color: white
-.header
+// fix issue where body shrinks on the right while modal is open on small screen
+body.modal-open
+  margin-right: 0  
+.container
+  max-width: 700px
+.bold
+  font-weight: bold
+.italic
+  font-style: italic
+.center
   text-align: center
-.middle
-  padding-top: 10px
-.footer
-  margin-top: 5px
+  margin-left: auto
+  margin-right: auto  
+// this keeps the search field on the same line as the button
+#searchSpan
+  display: block
+  overflow: hidden 
+// remove super-rounded corners from search box on iOS
+#searchInput
+  width: 95%
+  -webkit-appearance: none   
+// only on home page
+#scrollDiv
+  // the next value is the height of three list items
+  max-height: 246px
+  overflow: hidden
 .glyphicon-remove
   color: red
   margin-left: 10px
-#echoNestImg
-  padding-top: 15px
-#googleLoginImg
-  display: block
-  margin-left: auto
-  margin-right: auto
-#searchInput
-  width: 95%
-  -webkit-appearance: none
-#searchButton
-  margin-right: 5px
-  float: left
-  height: 42px
-#searchSpan
-  display: block
-  overflow: hidden
-#divModalDialogDelete
-  width: 200px
-  text-align: center
-#divModalDialogConfirm
-  width: 90%
-  max-width: 400px
-  margin-left: auto
-  margin-right: auto
-  text-align: center
-#divModalContentConfirm  
-  background-color: #e2ffe0
-// fix issue where body shrinks on the right while modal is open on small screen
-body.modal-open
-  margin-right: 0
-.scroll-text
-  height: 300px
-  overflow: hidden
-.maxWidth700
-  max-width: 700px
-  margin-left: auto
-  margin-right: auto
-#divSpotify
+.spotifySong
+  float: right  
+#spotifyDiv
   height: 75px
   margin-top: 10px
   margin-bottom: 10px
   text-align: center
   -webkit-filter: grayscale(0.8)
-.spotifySong
-  float: right
-.bold
-  font-weight: bold
-.italic
-  font-style: italic
+#searchButton
+  margin-right: 5px
+  float: left
+  height: 42px
+#googleLoginImg
+  display: block
+  margin-left: auto
+  margin-right: auto  
+.modal-dialog-delete
+  width: 200px
+  text-align: center
+// only on search results page
+#echoNestImg
+  padding-top: 15px
+.modal-content-confirm
+  width: 90%
+  max-width: 400px
+  margin-left: auto
+  margin-right: auto
+  text-align: center
+  background-color: #e2ffe0
+.padded-div
+  padding: 10px
+
+
