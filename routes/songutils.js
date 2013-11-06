@@ -34,37 +34,48 @@ exports.attachHandlers = function attachHandlers(app) {
     app.post('/confirm', ensureAuthenticated, function (req, res) {
         var newSong = {},
             baseUrl = "http://ws.spotify.com/search/1/track.json",
-            queryUrl;
+            queryUrl,
+            i;
         newSong.id = req.body.songId || 'missing songId';
         newSong.artist_name = req.body.artist || "missing artist";
         newSong.title = req.body.song || 'missing song';
         newSong.performerid = req.user.email;
         newSong.performer = req.user.name;
-        // get spotify track ID
-        queryUrl = baseUrl + "?q=" + encodeURIComponent(newSong.artist_name + " " + newSong.title);
-        http.get(queryUrl, function (apiRes) {
-            // the object apiRes is type IncomingMessage
-            console.log('got response from spotify ' + apiRes.statusCode);
-            var body = '';
-            apiRes.setEncoding('utf8');
-            apiRes.on('data', function (chunk) {
-                body += chunk;
-            });
-            // parse the JSON response and render the search results view
-            apiRes.on('end', function () {
-                var jsonObj = JSON.parse(body),
-                    i = 0;
-                while ((newSong.spotify === undefined) && (i < jsonObj.tracks.length)) {
-                    if (jsonObj.tracks[i].album.availability.territories.indexOf('US') > -1) {
-                        console.log("found track ID");
-                        newSong.spotify = jsonObj.tracks[i].href;
-                    }
-                    i += 1;
-                }
-                console.log("store to db:" + JSON.stringify(newSong));
-                // redis: add to 'Songs' list
-                client.lpush("Songs", JSON.stringify(newSong), function () {
+        // prevent duplicates
+        getSongList(function (songList) {
+            for (i = 0; i < songList.length ; i++) {
+                if ((songList[i].id == newSong.id) && (songList[i].performerid == newSong.performerid))
+                {
                     res.redirect('/');
+                    return;
+                }
+            }
+            // get spotify track ID
+            queryUrl = baseUrl + "?q=" + encodeURIComponent(newSong.artist_name + " " + newSong.title);
+            http.get(queryUrl, function (apiRes) {
+                // the object apiRes is type IncomingMessage
+                console.log('got response from spotify ' + apiRes.statusCode);
+                var body = '';
+                apiRes.setEncoding('utf8');
+                apiRes.on('data', function (chunk) {
+                    body += chunk;
+                });
+                // parse the JSON response and render the search results view
+                apiRes.on('end', function () {
+                    var jsonObj = JSON.parse(body),
+                        i = 0;
+                    while ((newSong.spotify === undefined) && (i < jsonObj.tracks.length)) {
+                        if (jsonObj.tracks[i].album.availability.territories.indexOf('US') > -1) {
+                            console.log("found track ID");
+                            newSong.spotify = jsonObj.tracks[i].href;
+                        }
+                        i += 1;
+                    }
+                    console.log("store to db:" + JSON.stringify(newSong));
+                    // redis: add to 'Songs' list
+                    client.lpush("Songs", JSON.stringify(newSong), function () {
+                        res.redirect('/');
+                    });
                 });
             });
         });
